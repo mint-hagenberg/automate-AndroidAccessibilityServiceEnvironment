@@ -1,0 +1,5 @@
+include ':lib'
+include 'LoggingClientJavaCore'
+project(':LoggingClientJavaCore').projectDir = file('LoggingClientAndroidExtension/LoggingClientJavaCore/lib')
+include 'LoggingClientAndroidExtension'
+project(':LoggingClientAndroidExtension').projectDir = file('LoggingClientAndroidExtension/lib')
