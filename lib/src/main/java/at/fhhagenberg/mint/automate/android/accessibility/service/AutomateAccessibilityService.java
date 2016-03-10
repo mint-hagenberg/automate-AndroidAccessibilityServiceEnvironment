@@ -28,7 +28,6 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
-import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
@@ -38,8 +37,8 @@ import java.util.Date;
 import at.fh.hagenberg.mint.automate.loggingclient.androidextension.kernel.AndroidKernel;
 import at.fh.hagenberg.mint.automate.loggingclient.androidextension.util.KernelManagerHelper;
 import at.fh.hagenberg.mint.automate.loggingclient.androidextension.util.PropertiesHelper;
-import at.fhhagenberg.mint.automate.android.accessibility.service.event.AppInteractionEvent;
-import at.fhhagenberg.mint.automate.android.accessibility.service.event.AppScreenVisitEvent;
+import at.fhhagenberg.mint.automate.android.basemanager.appinteraction.event.AppInteractionEvent;
+import at.fhhagenberg.mint.automate.android.basemanager.appinteraction.event.AppScreenVisitEvent;
 import at.fhhagenberg.mint.automate.loggingclient.javacore.action.DebugLogAction;
 import at.fhhagenberg.mint.automate.loggingclient.javacore.action.EventAction;
 import at.fhhagenberg.mint.automate.loggingclient.javacore.debuglogging.DebugLogManager;

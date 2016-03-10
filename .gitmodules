@@ -1,3 +1,6 @@
 [submodule "LoggingClientAndroidExtension"]
 	path = LoggingClientAndroidExtension
 	url = https://mintserver.projekte.fh-hagenberg.at:9418/r/opensource/automate-LoggingClientAndroidExtension.git
+[submodule "AndroidBaseManager"]
+	path = AndroidBaseManager
+	url = https://mintserver.projekte.fh-hagenberg.at:9418/r/automate-AndroidBaseManager.git
