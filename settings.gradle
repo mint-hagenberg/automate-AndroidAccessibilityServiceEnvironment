@@ -1,7 +1,1 @@
-include ':lib'
-include 'LoggingClientJavaCore'
-project(':LoggingClientJavaCore').projectDir = file('AndroidBaseManager/LoggingClientAndroidExtension/LoggingClientJavaCore/lib')
-include 'LoggingClientAndroidExtension'
-project(':LoggingClientAndroidExtension').projectDir = file('AndroidBaseManager/LoggingClientAndroidExtension/lib')
-include 'AndroidBaseManager'
-project(':AndroidBaseManager').projectDir = file('AndroidBaseManager/lib')
+include ':lib', ':uitest'

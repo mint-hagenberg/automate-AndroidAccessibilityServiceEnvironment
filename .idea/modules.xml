@@ -2,13 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/AndroidBaseManager/lib/AndroidBaseManager.iml" filepath="$PROJECT_DIR$/AndroidBaseManager/lib/AndroidBaseManager.iml" />
-      <module fileurl="file://$PROJECT_DIR$/AndroidBaseManager/LoggingClientAndroidExtension/lib/LoggingClientAndroidExtension.iml" filepath="$PROJECT_DIR$/AndroidBaseManager/LoggingClientAndroidExtension/lib/LoggingClientAndroidExtension.iml" />
       <module fileurl="file://$PROJECT_DIR$/LoggingClientAndroidExtension/lib/LoggingClientAndroidExtension.iml" filepath="$PROJECT_DIR$/LoggingClientAndroidExtension/lib/LoggingClientAndroidExtension.iml" />
-      <module fileurl="file://$PROJECT_DIR$/AndroidBaseManager/LoggingClientAndroidExtension/LoggingClientJavaCore/lib/LoggingClientJavaCore.iml" filepath="$PROJECT_DIR$/AndroidBaseManager/LoggingClientAndroidExtension/LoggingClientJavaCore/lib/LoggingClientJavaCore.iml" />
       <module fileurl="file://$PROJECT_DIR$/LoggingClientAndroidExtension/LoggingClientJavaCore/lib/LoggingClientJavaCore.iml" filepath="$PROJECT_DIR$/LoggingClientAndroidExtension/LoggingClientJavaCore/lib/LoggingClientJavaCore.iml" />
       <module fileurl="file://$PROJECT_DIR$/automate-AndroidAccessibilityServiceEnvironment.iml" filepath="$PROJECT_DIR$/automate-AndroidAccessibilityServiceEnvironment.iml" />
       <module fileurl="file://$PROJECT_DIR$/lib/lib.iml" filepath="$PROJECT_DIR$/lib/lib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/uitest/uitest.iml" filepath="$PROJECT_DIR$/uitest/uitest.iml" />
     </modules>
   </component>
 </project>

@@ -9,19 +9,15 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/AndroidBaseManager/LoggingClientAndroidExtension/LoggingClientJavaCore/lib" />
-            <option value="$PROJECT_DIR$/AndroidBaseManager/LoggingClientAndroidExtension/lib" />
-            <option value="$PROJECT_DIR$/AndroidBaseManager/lib" />
             <option value="$PROJECT_DIR$/lib" />
+            <option value="$PROJECT_DIR$/uitest" />
           </set>
         </option>
         <option name="myModules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/AndroidBaseManager/LoggingClientAndroidExtension/LoggingClientJavaCore/lib" />
-            <option value="$PROJECT_DIR$/AndroidBaseManager/LoggingClientAndroidExtension/lib" />
-            <option value="$PROJECT_DIR$/AndroidBaseManager/lib" />
             <option value="$PROJECT_DIR$/lib" />
+            <option value="$PROJECT_DIR$/uitest" />
           </set>
         </option>
       </GradleProjectSettings>
