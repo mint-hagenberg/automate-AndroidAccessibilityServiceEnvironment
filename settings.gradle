@@ -1,1 +1,1 @@
-include ':AndroidAccessibilityServiceEnvironment', ':uitest'
+include ':AndroidAccessibilityServiceEnvironment'
