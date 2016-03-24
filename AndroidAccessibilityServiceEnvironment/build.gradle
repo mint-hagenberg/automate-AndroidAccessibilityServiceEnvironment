@@ -82,3 +82,8 @@ publishing {
         }
     }
 }
+
+android.buildTypes.all { variant ->
+    def name = variant.name.substring(0, 1).toUpperCase() + variant.name.substring(1)
+    task "publish${name}Local"(dependsOn: "publish${name}AarPublicationToMavenLocal")
+}
