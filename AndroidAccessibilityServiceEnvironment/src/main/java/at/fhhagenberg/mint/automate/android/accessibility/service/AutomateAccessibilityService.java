@@ -18,6 +18,7 @@
 package at.fhhagenberg.mint.automate.android.accessibility.service;
 
 import android.accessibilityservice.AccessibilityService;
+import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
@@ -55,15 +56,21 @@ public class AutomateAccessibilityService extends AccessibilityService {
 	/**
 	 * Internal/local broadcast action when the kernel was started.
 	 */
-	public static String ACTION_BACKGROUND_SERVICE_STARTED = "at.fhhagenberg.mint.automate.android.accessibility.STARTED";
+	public static final String ACTION_BACKGROUND_SERVICE_STARTED = "at.fhhagenberg.mint.automate.android.accessibility.STARTED";
 	/**
 	 * Internal/local broadcast action when the kernel was stopped.
 	 */
-	public static String ACTION_BACKGROUND_SERVICE_STOPPED = "at.fhhagenberg.mint.automate.android.accessibility.STOPPED";
-	
+	public static final String ACTION_BACKGROUND_SERVICE_STOPPED = "at.fhhagenberg.mint.automate.android.accessibility.STOPPED";
+
+	private static final String ACTION_DISABLE_KERNEL = "disableKernel";
+
+	private static final String EXTRA_KERNEL_DISABLE_VALUE = "disable";
+
 	private static final long COMPLEX_SCROLL_TIMEOUT = 250;
 
 	private static boolean sIsRunning = false;
+
+	private static boolean sIsKernelDisabled = false;
 
 	/**
 	 * Check if the service is running.
@@ -74,15 +81,43 @@ public class AutomateAccessibilityService extends AccessibilityService {
 		return sIsRunning;
 	}
 
+	/**
+	 * Check if the Kernel should not be running.
+	 *
+	 * @return -
+	 */
+	public static boolean isKernelDisabled() {
+		return sIsKernelDisabled;
+	}
+
+	public static void disableKernel(Context context) {
+		setDisableKernel(context, true);
+	}
+
+	public static void enableKernel(Context context) {
+		setDisableKernel(context, false);
+	}
+
+	private static void setDisableKernel(Context context, boolean disable) {
+		Intent intent = new Intent(ACTION_DISABLE_KERNEL);
+		intent.putExtra(EXTRA_KERNEL_DISABLE_VALUE, disable);
+		LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+	}
+
 	private BroadcastReceiver mReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF)) {
+			if (intent.getAction().equals(Intent.ACTION_SCREEN_OFF) || intent.getAction().equals(Intent.ACTION_SHUTDOWN)) {
 				shutdownKernel();
 			} else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
 				startKernel();
-			} else if (intent.getAction().equals(Intent.ACTION_SHUTDOWN)) {
-				shutdownKernel();
+			} else if (intent.getAction().equals(ACTION_DISABLE_KERNEL)) {
+				sIsKernelDisabled = intent.getBooleanExtra(EXTRA_KERNEL_DISABLE_VALUE, true);
+				if (sIsKernelDisabled) {
+					shutdownKernel();
+				} else {
+					startKernel();
+				}
 			}
 		}
 	};
@@ -104,6 +139,8 @@ public class AutomateAccessibilityService extends AccessibilityService {
 		filter.addAction(Intent.ACTION_SHUTDOWN);
 		registerReceiver(mReceiver, filter);
 
+		LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter(ACTION_DISABLE_KERNEL));
+
 		try {
 			mIncludeOnlyPackageNames = PropertiesHelper.getProperty(((AndroidKernel) KernelBase.getKernel()).getContext(), "accessibility.includeOnly.packageNames", String[].class);
 		} catch (Exception e) {
@@ -117,6 +154,7 @@ public class AutomateAccessibilityService extends AccessibilityService {
 	@Override
 	public void onDestroy() {
 		unregisterReceiver(mReceiver);
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
 
 		shutdownKernel();
 		sIsRunning = false;
@@ -135,6 +173,11 @@ public class AutomateAccessibilityService extends AccessibilityService {
 	}
 
 	private void startKernel() {
+		if (sIsKernelDisabled) {
+			shutdownKernel();
+			return;
+		}
+
 		initKernel();
 		if (!KernelBase.isKernelUpRunning()) {
 			try {
@@ -231,6 +274,7 @@ public class AutomateAccessibilityService extends AccessibilityService {
 		sendInteractionEvent(event);
 	}
 
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 	private void sendInteractionEvent(AccessibilityEvent event) {
 		AccessibilityNodeInfo source = event.getSource();
 		if (source != null) {
