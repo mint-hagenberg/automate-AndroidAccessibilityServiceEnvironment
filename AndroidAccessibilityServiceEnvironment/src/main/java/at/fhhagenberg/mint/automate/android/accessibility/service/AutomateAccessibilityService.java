@@ -62,9 +62,15 @@ public class AutomateAccessibilityService extends AccessibilityService {
 	 */
 	public static final String ACTION_BACKGROUND_SERVICE_STOPPED = "at.fhhagenberg.mint.automate.android.accessibility.STOPPED";
 
-	private static final String ACTION_DISABLE_KERNEL = "disableKernel";
+	/**
+	 * Internal/broadcast to disable or enable the kernel.
+	 */
+	public static final String ACTION_SET_KERNEL_DISABLED_STATE = "at.fhhagenberg.mint.automate.android.accessibility.SET_KERNEL_DISABLED_STATE";
 
-	private static final String EXTRA_KERNEL_DISABLE_VALUE = "disable";
+	/**
+	 * The boolean extra to set the disabled or enabled state of the kernel.
+	 */
+	public static final String EXTRA_KERNEL_DISABLED_VALUE = "disabled";
 
 	private static final long COMPLEX_SCROLL_TIMEOUT = 250;
 
@@ -90,20 +96,6 @@ public class AutomateAccessibilityService extends AccessibilityService {
 		return sIsKernelDisabled;
 	}
 
-	public static void disableKernel(Context context) {
-		setDisableKernel(context, true);
-	}
-
-	public static void enableKernel(Context context) {
-		setDisableKernel(context, false);
-	}
-
-	private static void setDisableKernel(Context context, boolean disable) {
-		Intent intent = new Intent(ACTION_DISABLE_KERNEL);
-		intent.putExtra(EXTRA_KERNEL_DISABLE_VALUE, disable);
-		LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-	}
-
 	private BroadcastReceiver mReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -111,8 +103,8 @@ public class AutomateAccessibilityService extends AccessibilityService {
 				shutdownKernel();
 			} else if (intent.getAction().equals(Intent.ACTION_SCREEN_ON)) {
 				startKernel();
-			} else if (intent.getAction().equals(ACTION_DISABLE_KERNEL)) {
-				sIsKernelDisabled = intent.getBooleanExtra(EXTRA_KERNEL_DISABLE_VALUE, true);
+			} else if (intent.getAction().equals(ACTION_SET_KERNEL_DISABLED_STATE)) {
+				sIsKernelDisabled = intent.getBooleanExtra(EXTRA_KERNEL_DISABLED_VALUE, true);
 				if (sIsKernelDisabled) {
 					shutdownKernel();
 				} else {
@@ -137,9 +129,8 @@ public class AutomateAccessibilityService extends AccessibilityService {
 		filter.addAction(Intent.ACTION_SCREEN_OFF);
 		filter.addAction(Intent.ACTION_SCREEN_ON);
 		filter.addAction(Intent.ACTION_SHUTDOWN);
+		filter.addAction(ACTION_SET_KERNEL_DISABLED_STATE);
 		registerReceiver(mReceiver, filter);
-
-		LocalBroadcastManager.getInstance(this).registerReceiver(mReceiver, new IntentFilter(ACTION_DISABLE_KERNEL));
 
 		try {
 			mIncludeOnlyPackageNames = PropertiesHelper.getProperty(((AndroidKernel) KernelBase.getKernel()).getContext(), "accessibility.includeOnly.packageNames", String[].class);
@@ -154,7 +145,6 @@ public class AutomateAccessibilityService extends AccessibilityService {
 	@Override
 	public void onDestroy() {
 		unregisterReceiver(mReceiver);
-		LocalBroadcastManager.getInstance(this).unregisterReceiver(mReceiver);
 
 		shutdownKernel();
 		sIsRunning = false;
@@ -199,7 +189,6 @@ public class AutomateAccessibilityService extends AccessibilityService {
 	@Override
 	public void onAccessibilityEvent(AccessibilityEvent event) {
 		if (!KernelBase.getKernel().isRunning()) {
-			new DebugLogAction(KernelBase.getKernel(), DebugLogManager.Priority.DEBUG, TAG, "Kernel not running!").execute();
 			return;
 		}
 
