@@ -16,6 +16,10 @@
  *     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+plugins {
+    id "com.jfrog.bintray" version "1.7"
+}
+
 apply plugin: 'com.android.library'
 
 android {
@@ -26,7 +30,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
-        versionName "1.0.0"
+        versionName VERSION
     }
     buildTypes {
         release {
@@ -50,7 +54,7 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'at.fhhagenberg.mint.automate:AndroidBaseManager:1.0.0-SNAPSHOT'
+    compile 'at.fhhagenberg.mint.automate:AndroidBaseManager:1.0.0'
     compile 'com.android.support:appcompat-v7:23.4.0'
 }
 
@@ -97,6 +101,24 @@ publishing {
                     }
                 }
             }
+        }
+    }
+}
+
+bintray {
+    user = BINTRAY_USER
+    key = BINTRAY_API_KEY
+    pkg {
+        repo = 'automate'
+        name = ARTIFACT_ID
+        userOrg = 'mint-hagenberg'
+        licenses = ['GPL-3.0']
+        vcsUrl = 'https://github.com/mint-hagenberg/automate-' + ARTIFACT_ID
+        publications = ['releaseAar']
+        version {
+            name = VERSION
+            released = new Date()
+            vcsTag = VERSION
         }
     }
 }
