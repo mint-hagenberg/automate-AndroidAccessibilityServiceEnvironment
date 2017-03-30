@@ -249,7 +249,9 @@ public class AutomateAccessibilityService extends AccessibilityService {
 		}
 
 		for (String pkg : mIncludeOnlyPackageNames) {
-			if (pkg.equals(packageName)) {
+			if (pkg.endsWith("*") && packageName.startsWith(pkg.substring(0, pkg.length() - 1))) {
+				return true;
+			} else if (packageName.equals(pkg)) {
 				return true;
 			}
 		}
